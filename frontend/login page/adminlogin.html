@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NORMAL | Login</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- GSAP -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+min-height:100vh;
+background:black;
+display:flex;
+align-items:center;
+justify-content:center;
+background-image:url("../images/image.png");
+background-size:cover;
+background-position:center;
+color:rgb(255, 255, 255);
+}
+
+.overlay{
+position:absolute;
+inset:0;
+background:rgba(0,0,0,0.75);
+}
+
+.card{
+width:360px;
+padding:40px;
+border: 2px solid rgba(255, 255, 255, 0.566);
+background:rgba(20,20,20,0.9);
+border-radius:18px;
+backdrop-filter:blur(12px);
+box-shadow:0 0 40px rgba(0,0,0,0.8);
+position:relative;
+z-index:2;
+}
+
+/* TEXT */
+
+h1{
+font-family:'Poppins';
+text-align:center;
+margin-bottom:8px;
+white-space: nowrap;
+}
+
+p.subtitle{
+text-align:center;
+font-size:13px;
+color:#aaa;
+margin-bottom:25px;
+}
+
+/* INPUTS */
+
+.field{
+margin-bottom:18px;
+}
+
+label{
+font-size:12px;
+color:#aaa;
+}
+
+input{
+width:100%;
+margin-top:6px;
+padding:12px;
+border-radius:8px;
+background:#111;
+border:1px solid #333;
+color:white;
+font-size:14px;
+}
+
+input:focus{
+outline:none;
+border-color:#6fa4ff;
+}
+
+/* PASSWORD */
+
+.password-box{
+position:relative;
+}
+
+.show{
+position:absolute;
+right:12px;
+top:38px;
+font-size:12px;
+color:#6fa4ff;
+cursor:pointer;
+}
+
+/* BUTTONS */
+
+.btn{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:none;
+font-size:15px;
+cursor:pointer;
+margin-top:12px;
+}
+
+.login-btn{
+background:#6fa4ff;
+color:black;
+}
+
+.login-btn:hover{
+background:#154793;
+}
+
+.home-btn{
+background:transparent;
+border:1px solid #6fa4ff;
+color:#6fa4ff;
+}
+
+.home-btn:hover{
+background:#6fa4ff;
+color:black;
+}
+
+
+
+#error{
+color:#ff6b6b;
+font-size:12px;
+text-align:center;
+margin-bottom:10px;
+}
+
+.fade{
+  opacity:0.7;
+}
+
+
+
+</style>
+</head>
+
+<body>
+
+<div class="overlay"></div>
+
+<div class="card">
+
+<h1 class="fade">Welcome, Admin</h1>
+<p class="subtitle fade">Administrator Control Panel</p>
+
+
+<div id="error"></div>
+
+<div class="field fade">
+<label>Email</label>
+<input type="email" id="email">
+</div>
+
+<div class="field fade password-box">
+<label>Password</label>
+<input type="password" id="password">
+<span class="show" onclick="toggle()">Show</span>
+</div>
+
+<button class="btn login-btn fade" onclick="login()">Login</button>
+
+<button class="btn home-btn fade" onclick="goHome()">Return Home</button>
+
+<div class="links fade">
+</div>
+
+</div>
+
+<script>
+
+/* GSAP */
+
+gsap.fromTo(".fade",
+  { opacity:0, y:30 },
+  { opacity:1, y:0, duration:1, stagger:0.15, ease:"power3.out" }
+);
+
+
+/* SHOW PASSWORD */
+
+function toggle(){
+const p=document.getElementById("password");
+p.type = p.type==="password" ? "text" : "password";
+}
+
+/* LOGIN */
+
+function login(){
+const email=document.getElementById("email").value.trim();
+const pass=document.getElementById("password").value.trim();
+const err=document.getElementById("error");
+
+if(!email || !pass){
+err.innerText="Fill all fields.";
+return;
+}
+
+if(pass.length<6){
+err.innerText="Password must be at least 6 characters.";
+return;
+}
+
+localStorage.setItem("user",email);
+alert("Login Successful");
+window.location.href="dashboard.html";
+}
+
+/* HOME */
+
+function goHome(){
+window.location.href="../index.html";
+}
+
+</script>
+
+</body>
+</html>
