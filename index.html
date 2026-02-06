@@ -1,14 +1,22 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Normal</title>
-    <link rel="stylesheet" href="./style/style.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style/style.css" />
+  </head>
+  <body>
     <div id="main">
-        <div id="page1">
+      <div id="page1">
         <nav>
           <div class="left">
             <h4><a href="home.html">Home</a></h4>
@@ -25,7 +33,7 @@
           </div>
         </nav>
 
-        <div class="heading">
+        <div class="heading" data-scroll data-scroll-speed="3">
           <h1>NORMAL</h1>
         </div>
       </div>
@@ -36,14 +44,19 @@
         </div>
         <div class="second_page2">
           <div class="box">
-            <a href=""><h2 >click here</h2></a>
-            
+            <a href="games/game1.html"
+              ><h2 data-scroll data-scroll-speed="-1.5">click here</h2></a
+            >
           </div>
           <div class="box">
-            <a href="games/game2.html"><h2 >click here</h2></a>
+            <a href="games/game2.html"
+              ><h2 data-scroll data-scroll-speed="-1.5">click here</h2></a
+            >
           </div>
           <div class="box">
-            <a href="games/game3.html"><h2 >click here</h2></a>
+            <a href="games/game3.html"
+              ><h2 data-scroll data-scroll-speed="-1.5">click here</h2></a
+            >
           </div>
         </div>
       </div>
@@ -54,7 +67,7 @@
         </div>
 
         <div class="second_page3">
-          <div class="box">
+          <div class="box" data-scroll data-scroll-speed="2">
             <div class="mouse_div"></div>
             <h2>OVERTHINKING TEST</h2>
             <p>
@@ -64,11 +77,11 @@
               overthinking mode. This meter checks if your thoughts are on
               turbo-speed WiFi or just chilling at normal bandwidth.
             </p>
-            <a href=""
+            <a href="./overthinking_meter.html"
               ><h4>go to test <i class="ri-arrow-right-up-line"></i></h4
             ></a>
           </div>
-          <div class="box">
+          <div class="box" data-scroll data-scroll-speed="1">
             <div class="mouse_div"></div>
             <h2>BRAIN BATTERY</h2>
             <p>
@@ -78,11 +91,11 @@
               you need a recharge nap or you're secretly running on infinite
               battery like Iron Man's arc reactor.
             </p>
-            <a href="brain_battery.html"
+            <a href="./brain_battery.html"
               ><h4>go to test <i class="ri-arrow-right-up-line"></i></h4
             ></a>
           </div>
-          <div class="box">
+          <div class="box" data-scroll data-scroll-speed="0">
             <div class="mouse_div"></div>
             <h2>LOW-KEY VIBE CHECK</h2>
             <p>
@@ -92,29 +105,33 @@
               we're checking here. It's not about labels, it's about seeing if
               your brain is craving some sunshine or just some extra chill time.
             </p>
-            <a href=""
+            <a href="./low_key_similuter.html"
               ><h4>go to test <i class="ri-arrow-right-up-line"></i></h4
             ></a>
           </div>
         </div>
       </div>
-       <div id="page4">
+      <div id="page4">
         <img
           src="images/Gemini_Generated_Image_53no4n53no4n53no-removebg-preview.png"
           alt=""
           class="right"
-          
+          data-scroll
+          data-scroll-speed="1.5"
         />
         <img
           src="images/Gemini_Generated_Image_bkpjyubkpjyubkpj-removebg-preview-removebg-preview.png"
           alt=""
           class="left"
+          data-scroll
+          data-scroll-speed="1.5"
         />
         <img
           src="images/Gemini_Generated_Image_cn9bbacn9bbacn9b-removebg-preview.png"
           alt=""
           class="center"
-
+          data-scroll
+          data-scroll-speed="1.5"
         />
 
         <div class="heading">
@@ -147,21 +164,40 @@
         </div>
       </div>
       <div id="page6">
-        <div class="top_heading">
+        <div class="top_heading" data-scroll data-scroll-speed="1.5">
           Counselor helpdesk
         </div>
-        <div class="left_image">
+        <div class="left_image" data-scroll data-scroll-speed="3">
           <img
             src="images/vecteezy_a-professional-psychologist-offers-counseling-during_5611426_1-removebg-preview.png"
             alt=""
           />
         </div>
-        <div class="right_discription" >
+        <div class="right_discription" data-scroll data-scroll-speed="1.5">
           A safe digital space where professional counselors listen, guide, and
           provide trusted mental health care through real-time confidential chat
           support
         </div>
       </div>
+      <footer>
+        <!-- <img src="images/logo_2.png" alt=""> -->
+        <h1>NORMAL</h1>
+        <h2>© 2025 Tech Arsenal. Created for MOVEATHON’25</h2>
+      </footer>
     </div>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"
+      integrity="sha512-P2IDYZfqSwjcSjX0BKeNhwRUH8zRPGlgcWl5n6gBLzdi4Y5/0O4zaXrtO4K9TZK6Hn1BenYpKowuCavNandERg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"
+      integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="./javascript/script.js"></script>
+  </body>
 </html>
