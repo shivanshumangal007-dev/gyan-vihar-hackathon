@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>breathewell</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top, #0d1b1e, #050505);
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, system-ui, sans-serif;
+}
+
+.app {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 28px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modes {
+  display: flex;
+  gap: 12px;
+}
+
+button {
+  background: rgba(255,255,255,0.08);
+  color: #e8fdfd;
+  border: 1px solid rgba(120,220,220,0.35);
+  padding: 10px 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+}
+
+button.active {
+  background: linear-gradient(135deg, #4dd, #8b5cf6);
+  color: #020617;
+  border-color: transparent;
+}
+
+.goal {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.goal input {
+  width: 140px;
+}
+
+#goalLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: #7ff;
+}
+
+.center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 36px;
+}
+
+.circle {
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #eaffff, #7ffcff 25%, #2dd4bf 55%, #064e3b 75%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 3s ease;
+  box-shadow:
+    0 0 40px rgba(127,255,255,0.6),
+    0 0 80px rgba(45,212,191,0.45),
+    0 0 140px rgba(45,212,191,0.25),
+    inset 0 0 40px rgba(255,255,255,0.35);
+}
+
+.label {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 0.6px;
+  color: #033;
+}
+
+.nostrils {
+  display: flex;
+  gap: 56px;
+}
+
+.nostril {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  opacity: 0.4;
+}
+
+.nostril.active {
+  background: linear-gradient(135deg, #4dd, #8b5cf6);
+  opacity: 1;
+}
+
+.progress-wrap {
+  width: 100%;
+  max-width: 440px;
+}
+
+.progress-bar {
+  height: 9px;
+  background: #1b1b1b;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #4dd, #8b5cf6);
+  transition: width 0.4s ease;
+}
+
+.progress-text {
+  margin-top: 10px;
+  font-size: 13px;
+  opacity: 0.65;
+  text-align: center;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+.side {
+  background: linear-gradient(180deg, #0b1518, #06090a);
+  border-left: 1px solid rgba(120,220,220,0.15);
+  padding: 28px 26px;
+  overflow-y: auto;
+}
+
+.side h3 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #e6ffff;
+}
+
+.side h3::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 3px;
+  margin-top: 6px;
+  background: linear-gradient(90deg, #4dd, #8b5cf6);
+  border-radius: 4px;
+}
+
+.side p, .side li {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: #d6fafa;
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+  <div class="main">
+    <div class="top">
+      <div class="modes">
+        <button id="anulomBtn" class="active">Anulom Vilom</button>
+        <button id="kapalBtn">Kapalbhati</button>
+      </div>
+      <div class="goal">
+        Daily goal (minutes)
+        <input type="range" min="1" max="20" value="5" id="goalInput">
+        <span id="goalLabel">5 min</span>
+      </div>
+    </div>
+
+    <div class="center">
+      <div class="circle" id="circle">
+        <div class="label" id="label">Ready</div>
+      </div>
+      <div class="nostrils">
+        <div class="nostril" id="left"></div>
+        <div class="nostril" id="right"></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-bar">
+          <div class="progress" id="progress"></div>
+        </div>
+        <div class="progress-text" id="progressText">0 / 5 min</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <button id="startBtn">Start</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+  </div>
+
+  <div class="side">
+    <h3>How to Practice</h3>
+    <p id="howText">Follow the expanding and contracting sphere.</p>
+
+    <h3>About the Practice</h3>
+    <p id="infoText">Anulom Vilom balances breathing awareness.</p>
+
+    <h3>Helpful Tips</h3>
+    <ul id="tipsList">
+      <li>Do not force the breath</li>
+      <li>Move slowly</li>
+      <li>Stop if uncomfortable</li>
+    </ul>
+  </div>
+
+</div>
+
+<script>
+let mode = "anulom";
+let running = false;
+let step = 0;
+let timer = null;
+let elapsed = 0;
+let goalMinutes = 5;
+
+const circle = document.getElementById("circle");
+const label = document.getElementById("label");
+const left = document.getElementById("left");
+const right = document.getElementById("right");
+const progress = document.getElementById("progress");
+const progressText = document.getElementById("progressText");
+const goalInput = document.getElementById("goalInput");
+const goalLabel = document.getElementById("goalLabel");
+const howText = document.getElementById("howText");
+const infoText = document.getElementById("infoText");
+const tipsList = document.getElementById("tipsList");
+
+document.getElementById("startBtn").onclick = () => running ? stop() : start();
+document.getElementById("resetBtn").onclick = resetSession;
+document.getElementById("anulomBtn").onclick = () => switchMode("anulom");
+document.getElementById("kapalBtn").onclick = () => switchMode("kapal");
+
+goalInput.oninput = () => {
+  goalMinutes = goalInput.value;
+  goalLabel.innerText = `${goalMinutes} min`;
+  updateProgress();
+};
+
+function switchMode(m) {
+  resetSession();
+  mode = m;
+
+  document.getElementById("anulomBtn").classList.toggle("active", m === "anulom");
+  document.getElementById("kapalBtn").classList.toggle("active", m === "kapal");
+
+  if (m === "anulom") {
+    howText.innerText =
+      "Inhale through one nostril as shown. Hold gently. Exhale through the other nostril. Alternate sides.";
+    infoText.innerText =
+      "Anulom Vilom is traditionally practiced to support calmness and balanced breathing.";
+    tipsList.innerHTML = `
+      <li>Keep the breath smooth</li>
+      <li>Do not rush the hold</li>
+      <li>Practice in a quiet place</li>`;
+  } else {
+    howText.innerText =
+      "Actively exhale as the sphere contracts. Allow the inhale to happen naturally.";
+    infoText.innerText =
+      "Kapalbhati involves short, active exhales and passive inhales.";
+    tipsList.innerHTML = `
+      <li>Avoid forceful strain</li>
+      <li>Maintain a comfortable rhythm</li>
+      <li>Stop if you feel dizzy</li>`;
+  }
+
+  label.innerText = "Ready";
+}
+
+function start() {
+  running = true;
+  document.getElementById("startBtn").innerText = "Pause";
+  tick();
+  mode === "anulom" ? anulomLoop() : kapalLoop();
+}
+
+function stop() {
+  running = false;
+  clearTimeout(timer);
+  document.getElementById("startBtn").innerText = "Start";
+}
+
+function resetSession() {
+  stop();
+  elapsed = 0;
+  step = 0;
+  label.innerText = "Ready";
+  circle.style.transform = "scale(1)";
+  left.classList.remove("active");
+  right.classList.remove("active");
+  updateProgress();
+}
+
+function tick() {
+  if (!running) return;
+  elapsed++;
+  updateProgress();
+  setTimeout(tick, 1000);
+}
+
+function updateProgress() {
+  const total = goalMinutes * 60;
+  progress.style.width = `${Math.min(elapsed / total * 100, 100)}%`;
+  progressText.innerText = `${Math.floor(elapsed / 60)} / ${goalMinutes} min`;
+}
+
+function anulomLoop() {
+  if (!running) return;
+  const seq = [
+    { t: "Inhale", s: 1.25, n: left },
+    { t: "Hold", s: 1.25 },
+    { t: "Exhale", s: 0.9, n: right },
+    { t: "Inhale", s: 1.25, n: right },
+    { t: "Hold", s: 1.25 },
+    { t: "Exhale", s: 0.9, n: left }
+  ];
+  left.classList.remove("active");
+  right.classList.remove("active");
+  const c = seq[step % seq.length];
+  label.innerText = c.t;
+  circle.style.transform = `scale(${c.s})`;
+  if (c.n) c.n.classList.add("active");
+  step++;
+  timer = setTimeout(anulomLoop, 3000);
+}
+
+function kapalLoop() {
+  if (!running) return;
+  label.innerText = "Exhale";
+  circle.style.transform = "scale(0.85)";
+  left.classList.add("active");
+  right.classList.add("active");
+  timer = setTimeout(() => {
+    label.innerText = "Inhale";
+    circle.style.transform = "scale(1)";
+    timer = setTimeout(kapalLoop, 900);
+  }, 400);
+}
+</script>
+</body>
+</html>
