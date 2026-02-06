@@ -30,6 +30,11 @@ body {
   height: 100%;
 }
 
+#main{
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
 #page1 {
   max-width: 100%;
   width: 100%;
@@ -363,4 +368,61 @@ body {
   /* letter-spacing: 0.4vw;
   line-height:1.5vw;
   font-family: "Nunito Sans", sans-serif; */
+}
+
+/* page4 */
+#page4 {
+  width: 100%;
+  background-color: #93d1cc;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
+#page4 img {
+  position: absolute;
+  height: 110vh;
+}
+
+#page4 img.right {
+  right: -40px;
+  bottom: -80px;
+}
+
+#page4 img.left {
+  left: -0%;
+  height: 90vh;
+  bottom: 0;
+}
+
+#page4 img.center {
+  left: 40%;
+  bottom: 0;
+}
+
+#page4 .heading {
+  width: 100%;
+  text-align: center;
+  font-family: var(--font_1);
+  letter-spacing: 10px;
+  color: white;
+  font-size: 8vw;
+  font-weight: 200;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow: 1px 1px 10px #31313174;
+  position: relative;
+}
+#page4 .discription {
+  width: 40vw;
+  font-size: 2.5vw;
+  z-index: 3;
+  font-weight: 300;
+  margin-top: 2vw;
+  text-shadow: 1px 1px 10px #000000af;
+  text-align: center;
+  backdrop-filter: blur(3px);
+  color: white;
 }
