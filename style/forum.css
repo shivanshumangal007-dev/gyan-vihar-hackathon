@@ -124,14 +124,14 @@ body.dark-mode .navbar {
 }
 
 .hero h1 {
-  font-size: 4rem;
+  font-size: 5rem;
   font-weight: 700;
   margin-bottom: 1rem;
   line-height: 1.2;
 }
 
 .hero p {
-  font-size: 1.3rem;
+  font-size: 1.6rem;
   margin-bottom: 2rem;
   opacity: 0.9;
 }
@@ -142,7 +142,7 @@ body.dark-mode .navbar {
   padding: 1rem 2.5rem;
   border: none;
   border-radius: 50px;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
