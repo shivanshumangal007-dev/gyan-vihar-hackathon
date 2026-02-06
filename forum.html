@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NORMAL Forum - Student Mental Health Community</title>
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Locomotive Scroll CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css"
+    />
+    <link rel="stylesheet" href="style/forum.css">
+  </head>
+  <body class="dark-mode">
+    <!-- Navbar
+    <nav class="navbar">
+      <div class="logo">NORMAL</div>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#forum">Forum</a></li>
+        <li><a href="#resources">Resources</a></li>
+        <li><a href="#peer-chat">Peer Chat</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#help">Help</a></li>
+        <li>
+          <button class="dark-mode-toggle" onclick="toggleDarkMode()">
+            🌙 Dark Mode
+          </button>
+        </li>
+      </ul>
+    </nav> -->
+
+    <!-- Data Scroll Container -->
+    <div data-scroll-container>
+      <!-- Hero Section -->
+      <section class="hero" id="home" data-scroll-section>
+        <div class="hero-content" data-scroll data-scroll-speed="2">
+          <h1 class="hero-title">Welcome to NORMAL</h1>
+          <p>A safe space for students navigating mental health</p>
+          <button class="cta-button" onclick="scrollToForum()">
+            Join the Community
+          </button>
+        </div>
+      </section>
+
+      <!-- Quote Banner -->
+      <div
+        class="quote-banner"
+        data-scroll-section
+        data-scroll
+        data-scroll-speed="1"
+      >
+        <p id="random-quote">"You are not alone"</p>
+      </div>
+
+      <!-- Main Forum Section -->
+      <section class="main-container" id="forum" data-scroll-section>
+        <h2 class="section-title" data-scroll data-scroll-speed="0.5">
+          Community Forum
+        </h2>
+
+        <!-- Search and Filter Bar -->
+        <div class="search-filter-bar">
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search posts..."
+            id="searchInput"
+          />
+          <button class="filter-btn" onclick="toggleFilters()">
+            🔍 Filter
+          </button>
+          <button class="create-post-btn" onclick="openModal()">
+            + Create Post
+          </button>
+        </div>
+
+        <!-- Category Pills -->
+        <div class="category-pills" id="categoryPills">
+          <div class="category-pill active" data-category="all">All Posts</div>
+          <div class="category-pill" data-category="anxiety">Anxiety</div>
+          <div class="category-pill" data-category="stress">
+            Academic Stress
+          </div>
+          <div class="category-pill" data-category="depression">Depression</div>
+          <div class="category-pill" data-category="motivation">Motivation</div>
+          <div class="category-pill" data-category="sleep">Sleep</div>
+          <div class="category-pill" data-category="relationships">
+            Relationships
+          </div>
+        </div>
+
+        <!-- Posts Grid -->
+        <div class="posts-grid" id="postsGrid">
+          <!-- Posts will be dynamically loaded here -->
+        </div>
+      </section>
+
+      <!-- Mood Tracker -->
+      <section class="main-container" data-scroll-section>
+        <div class="mood-tracker" data-scroll data-scroll-speed="0.5">
+          <h3>How are you feeling today?</h3>
+          <p>Track your mood anonymously</p>
+          <div class="mood-options">
+            <button class="mood-btn" onclick="logMood('great')">😄</button>
+            <button class="mood-btn" onclick="logMood('good')">🙂</button>
+            <button class="mood-btn" onclick="logMood('okay')">😐</button>
+            <button class="mood-btn" onclick="logMood('low')">😔</button>
+            <button class="mood-btn" onclick="logMood('struggling')">😢</button>
+          </div>
+          <p id="mood-message" style="margin-top: 1rem; opacity: 0">
+            Thanks for sharing
+          </p>
+        </div>
+      </section>
+
+      <!-- Resources Section -->
+      <section class="resources-section" id="resources" data-scroll-section>
+        <h2 class="section-title" data-scroll>Helpful Resources</h2>
+        <div class="resources-grid">
+          <div class="resource-card" data-scroll data-scroll-speed="0.5">
+            <div class="resource-icon">📞</div>
+            <h3>Crisis Helplines</h3>
+            <p>24/7 support when you need it most</p>
+            <a href="#" class="resource-link">View Numbers →</a>
+          </div>
+          <div class="resource-card" data-scroll data-scroll-speed="0.5">
+            <div class="resource-icon">📚</div>
+            <h3>Mental Health Articles</h3>
+            <p>Learn about mental wellness</p>
+            <a href="#" class="resource-link">Read Articles →</a>
+          </div>
+          <div class="resource-card" data-scroll data-scroll-speed="0.5">
+            <div class="resource-icon">🎧</div>
+            <h3>Calming Audio</h3>
+            <p>Meditation and relaxation tracks</p>
+            <a href="#" class="resource-link">Listen Now →</a>
+          </div>
+          <div class="resource-card" data-scroll data-scroll-speed="0.5">
+            <div class="resource-icon">🧘</div>
+            <h3>Self-Care Tips</h3>
+            <p>Daily practices for better mental health</p>
+            <a href="#" class="resource-link">Explore Tips →</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- About Section -->
+      <section class="about-section" id="about" data-scroll-section>
+        <h2 class="section-title" data-scroll>About NORMAL</h2>
+        <div data-scroll data-scroll-speed="0.5">
+          <p>
+            NORMAL is more than a forum—it's a stigma-free sanctuary for
+            students facing mental health challenges.
+          </p>
+          <p>
+            We believe that struggling with anxiety, stress, or depression
+            doesn't make you abnormal. It makes you human. And you deserve a
+            space where you can share, connect, and heal without judgment.
+          </p>
+          <p>
+            Every voice here matters. Every story is valid. And every step
+            toward healing is celebrated.
+          </p>
+          <p><strong>You are not alone. This is NORMAL.</strong></p>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer data-scroll-section>
+        <p>NORMAL Forum © 2025 - Where Healing Happens Together</p>
+        <p style="margin-top: 1rem; opacity: 0.8">
+          All posts are anonymous. Your privacy is our priority.
+        </p>
+      </footer>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div class="modal" id="createPostModal">
+      <div class="modal-content">
+        <button class="close-modal" onclick="closeModal()">&times;</button>
+        <h2>Create Anonymous Post</h2>
+        <form id="postForm" onsubmit="submitPost(event)">
+          <div class="form-group">
+            <label for="postTitle">Title</label>
+            <input
+              type="text"
+              id="postTitle"
+              required
+              placeholder="What's on your mind?"
+            />
+          </div>
+          <div class="form-group">
+            <label for="postDescription">Share your thoughts</label>
+            <textarea
+              id="postDescription"
+              required
+              placeholder="Write your story here..."
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="postTag">Category</label>
+            <select id="postTag" required>
+              <option value="">Select a category</option>
+              <option value="anxiety">Anxiety</option>
+              <option value="stress">Academic Stress</option>
+              <option value="depression">Depression</option>
+              <option value="motivation">Motivation</option>
+              <option value="sleep">Sleep</option>
+              <option value="relationships">Relationships</option>
+            </select>
+          </div>
+          <button type="submit" class="submit-btn">Post Anonymously</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Thread View Modal -->
+    <div class="modal" id="threadModal">
+      <div class="modal-content">
+        <button class="close-modal" onclick="closeThreadModal()">
+          &times;
+        </button>
+        <div class="thread-view" id="threadContent">
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js"></script>
+    <script src="javascript/forum.js"></script>
+  </body>
+</html>
