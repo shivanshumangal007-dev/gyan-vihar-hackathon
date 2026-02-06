@@ -1,0 +1,24 @@
+{
+  "name": "normal-mental-first-aid-chatbot",
+  "version": "1.0.0",
+  "description": "Mental first-aid chatbot for NORMAL student wellness platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node tests/chatbot.test.js"
+  },
+  "keywords": [
+    "mental-health",
+    "chatbot",
+    "student-wellness"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "openai": "^4.104.0"
+  }
+}
