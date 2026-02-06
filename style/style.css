@@ -148,3 +148,71 @@ body {
   letter-spacing: 10px;
   font-weight: 700 ;
 }
+/* page2 */
+
+#page2 {
+  /* margin-top: 100vh; */
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  /* min-height: 100vh; */
+  background-color: #010000;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* padding: 0vh 5vw; */
+  background-size: cover;
+}
+#page2 .heading {
+  width: 100%;
+  text-align: center;
+  font-family: var(--font_1);
+  letter-spacing: 30px;
+  color: white;
+  font-size: 8vw;
+  text-transform: uppercase;
+  position: relative;
+  /* background-color: aquamarine; */
+  white-space: nowrap;
+}
+
+#page2 .second_page2 {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  justify-content: space-around;
+}
+#page2 .second_page2 .box {
+  background-image: url(../images/download.jpeg);
+  background-position: center;
+  background-size: cover;
+  width: 28vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  box-shadow: 1px 1px 8px #aaaaaa;
+  margin-bottom: 2vw;
+  /* margin: 20px; */
+}
+#page2 .second_page2 .box:nth-child(1) {
+  background-image: url(../images/placeholder_image_games.jpg.jpeg);;
+}
+#page2 .second_page2 .box:nth-child(2) {
+  background-image: url(../images/placeholder_image_games.jpg.jpeg);;
+}
+#page2 .second_page2 .box:nth-child(3) {
+  background-image: url(../images/placeholder_image_games.jpg.jpeg);;
+}
+ a {
+  text-decoration: none;  
+  color: inherit;
+}
+#page2 .second_page2 .box a h2 {
+  font-size: 2vw;
+  text-transform: uppercase;
+  background-color: rgb(32, 32, 32);
+  border-radius: 40px;
+  color: white;
+  padding: 0vw 5vw;
+}
