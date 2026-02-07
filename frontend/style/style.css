@@ -193,21 +193,22 @@ body {
   width: 28vw;
   height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   border-radius: 20px;
   box-shadow: 1px 1px 8px #aaaaaa;
   margin-bottom: 2vw;
+  padding-bottom: 4vw ;
   /* margin: 20px; */
 }
 #page2 .second_page2 .box:nth-child(1) {
-  background-image: url(../images/placeholder_image_games.jpg.jpeg);;
+  background-image: url(../images/Harmonic_ripple_game.png);;
 }
 #page2 .second_page2 .box:nth-child(2) {
-  background-image: url(../images/placeholder_image_games.jpg.jpeg);;
+  background-image: url(../images/connecting-dots-game.png);;
 }
 #page2 .second_page2 .box:nth-child(3) {
-  background-image: url(../images/placeholder_image_games.jpg.jpeg);;
+  background-image: url(../images/game3.jpg);;
 }
  a {
   text-decoration: none;  
@@ -216,7 +217,8 @@ body {
 #page2 .second_page2 .box a h2 {
   font-size: 2vw;
   text-transform: uppercase;
-  background-color: rgb(32, 32, 32);
+  /* background-color: rgb(32, 32, 32); */
+  border: 2px solid white;
   border-radius: 40px;
   color: white;
   padding: 0vw 5vw;
@@ -437,6 +439,21 @@ body {
   gap: 2vw;
   height: 100vh;
   position: relative;
+}
+#page5 .AI-symbol{
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 5rem;
+  height: 5rem;
+  overflow: hidden;
+  border-radius: 50% ;
+  box-shadow:5px 5px 20px #9183d9;
+  border: 2px solid purple;
+}
+
+.AI-symbol img{
+  width: 100%;
 }
 
 #page5 .right .heading {

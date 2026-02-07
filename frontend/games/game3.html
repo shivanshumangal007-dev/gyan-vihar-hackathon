@@ -37,13 +37,19 @@ html, body {
 
 .top {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 }
 
 .modes {
   display: flex;
+  flex-direction: column;
   gap: 12px;
+  margin-top: 20px;
+}
+
+.modes button {
+  width: 100%;
 }
 
 button {
@@ -193,18 +199,41 @@ button.active {
   line-height: 1.7;
   color: #d6fafa;
 }
+
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  padding: 12px 24px;
+  background: rgba(77, 221, 221, 0.15);
+  color: #7ffcff;
+  border: 2px solid rgba(127, 252, 255, 0.4);
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  text-decoration: none;
+  display: inline-block;
+}
+.back-button:hover {
+  background: rgba(77, 221, 221, 0.3);
+  border-color: #7ffcff;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(127, 252, 255, 0.3);
+}
+
 </style>
 </head>
 
 <body>
+<a href="../index.html" class="back-button">← Back</a>
 <div class="app">
 
   <div class="main">
     <div class="top">
-      <div class="modes">
-        <button id="anulomBtn" class="active">Anulom Vilom</button>
-        <button id="kapalBtn">Kapalbhati</button>
-      </div>
       <div class="goal">
         Daily goal (minutes)
         <input type="range" min="1" max="20" value="5" id="goalInput">
@@ -247,6 +276,12 @@ button.active {
       <li>Move slowly</li>
       <li>Stop if uncomfortable</li>
     </ul>
+
+    <h3>Breathing Mode</h3>
+    <div class="modes">
+      <button id="anulomBtn" class="active">Anulom Vilom</button>
+      <button id="kapalBtn">Kapalbhati</button>
+    </div>
   </div>
 
 </div>
