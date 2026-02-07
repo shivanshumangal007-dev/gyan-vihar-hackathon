@@ -193,15 +193,16 @@ body {
   width: 28vw;
   height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   border-radius: 20px;
   box-shadow: 1px 1px 8px #aaaaaa;
   margin-bottom: 2vw;
+  padding-bottom: 4vw ;
   /* margin: 20px; */
 }
 #page2 .second_page2 .box:nth-child(1) {
-  background-image: url(../images/placeholder_image_games.jpg.jpeg);;
+  background-image: url(../images/Harmonic_ripple_game.png);;
 }
 #page2 .second_page2 .box:nth-child(2) {
   background-image: url(../images/placeholder_image_games.jpg.jpeg);;
@@ -216,7 +217,8 @@ body {
 #page2 .second_page2 .box a h2 {
   font-size: 2vw;
   text-transform: uppercase;
-  background-color: rgb(32, 32, 32);
+  /* background-color: rgb(32, 32, 32); */
+  border: 2px solid white;
   border-radius: 40px;
   color: white;
   padding: 0vw 5vw;
