@@ -92,7 +92,7 @@
 // INTEGRATED WITH IONIZED-COPERNICUS CHATBOT
 // Forwards requests to the mental health chatbot API
 
-const CHATBOT_API_URL = 'http://localhost:3000/api/chat';
+const CHATBOT_API_URL = "https://normal-chatbot.onrender.com/api/chat";
 
 export async function getAIResponse(userMessage, conversationHistory) {
     try {
