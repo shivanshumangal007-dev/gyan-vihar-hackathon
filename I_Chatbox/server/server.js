@@ -3,6 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import chatRoutes from './routes/chat.js';
 
+import { getStats } from './utils/logger.js';
+
 // Load environment variables
 dotenv.config();
 
@@ -23,14 +25,19 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/chat', chatRoutes);
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', message: 'Server is running' });
+// Stats endpoint (Anonymous analytics)
+app.get('/api/stats', (req, res) => {
+    try {
+        const stats = getStats();
+        res.json(stats);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch stats' });
+    }
 });
 
-// 404 handler
-app.use((req, res) => {
-    res.status(404).json({ error: 'Route not found' });
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', message: 'Server is running', version: '2.0.0-unified' });
 });
 
 // Error handling middleware

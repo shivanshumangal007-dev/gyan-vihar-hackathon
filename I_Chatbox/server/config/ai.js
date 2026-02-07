@@ -58,7 +58,7 @@
  * import Anthropic from '@anthropic-ai/sdk';
  * const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
  * 
- * export async function getAIResponse(userMessage, conversationHistory) {
++ * export async function getAIResponse(userMessage, conversationHistory) {
  *   const message = await anthropic.messages.create({
  *     model: "claude-3-sonnet-20240229",
  *     max_tokens: 1024,
@@ -92,7 +92,7 @@
 // INTEGRATED WITH IONIZED-COPERNICUS CHATBOT
 // Forwards requests to the mental health chatbot API
 
-const CHATBOT_API_URL = 'http://localhost:3000/api/chat';
+const CHATBOT_API_URL = 'http://320032568/745478/*';
 
 export async function getAIResponse(userMessage, conversationHistory) {
     try {

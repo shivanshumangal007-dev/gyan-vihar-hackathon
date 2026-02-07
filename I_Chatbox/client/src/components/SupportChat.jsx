@@ -11,8 +11,12 @@ const SupportChat = () => {
     ]);
     const [inputValue, setInputValue] = useState('');
     const [isTyping, setIsTyping] = useState(false);
+    const [actions, setActions] = useState([]);
     const [error, setError] = useState(null);
     const chatEndRef = useRef(null);
+
+    // Get API URL from environment variable or fallback to same-origin
+    const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
     const scrollToBottom = () => {
         chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -20,34 +24,35 @@ const SupportChat = () => {
 
     useEffect(() => {
         scrollToBottom();
-    }, [messages, isTyping]);
+    }, [messages, isTyping, actions]);
 
-    const handleSend = async () => {
-        if (inputValue.trim() === '') return;
+    const handleSend = async (messageText = inputValue) => {
+        const textToSend = messageText.trim();
+        if (textToSend === '') return;
 
         const userMessage = {
-            id: messages.length + 1,
+            id: Date.now(),
             sender: 'user',
-            text: inputValue,
+            text: textToSend,
             timestamp: new Date()
         };
 
-        setMessages([...messages, userMessage]);
-        const currentInput = inputValue;
+        setMessages(prev => [...prev, userMessage]);
         setInputValue('');
+        setActions([]); // Clear previous actions
         setError(null);
-
-        // Show typing indicator
         setIsTyping(true);
 
         try {
-            // Call backend API
-            const response = await fetch('/api/chat', {
+            const response = await fetch(`${API_BASE_URL}/api/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ message: currentInput })
+                body: JSON.stringify({
+                    message: textToSend,
+                    sessionId: 'anonymous_session'
+                })
             });
 
             if (!response.ok) {
@@ -57,20 +62,20 @@ const SupportChat = () => {
             const data = await response.json();
 
             const aiMessage = {
-                id: messages.length + 2,
+                id: Date.now() + 1,
                 sender: 'ai',
                 text: data.response,
                 timestamp: new Date()
             };
 
             setMessages(prev => [...prev, aiMessage]);
+            setActions(data.actions || []);
         } catch (err) {
             console.error('Error:', err);
             setError('Unable to connect to the support service. Please try again.');
 
-            // Add error message to chat
             const errorMessage = {
-                id: messages.length + 2,
+                id: Date.now() + 2,
                 sender: 'ai',
                 text: 'I apologize, but I\'m having trouble connecting right now. Please try again in a moment.',
                 timestamp: new Date()
@@ -78,6 +83,26 @@ const SupportChat = () => {
             setMessages(prev => [...prev, errorMessage]);
         } finally {
             setIsTyping(false);
+        }
+    };
+
+    const handleActionClick = (action) => {
+        // Log action click for analytics if needed
+        console.log(`Action clicked: ${action}`);
+
+        // Some actions might just trigger a new message
+        if (action === 'chat') {
+            handleSend("I'd like to keep talking.");
+        } else {
+            // Placeholder for other actions like "breathing", "grounding", etc.
+            // In a full app, these would navigate to actual exercise pages
+            const feedbackMessage = {
+                id: Date.now() + 3,
+                sender: 'ai',
+                text: `You selected: ${action}. This feature is coming soon to help you even more! For now, we can continue chatting if you'd like.`,
+                timestamp: new Date()
+            };
+            setMessages(prev => [...prev, feedbackMessage]);
         }
     };
 
@@ -118,6 +143,23 @@ const SupportChat = () => {
                         </div>
                     )}
 
+                    {actions.length > 0 && (
+                        <div className="actions-container">
+                            <p className="actions-label">Suggested for you:</p>
+                            <div className="actions-buttons">
+                                {actions.map((item, index) => (
+                                    <button
+                                        key={index}
+                                        className="action-button"
+                                        onClick={() => handleActionClick(item.action)}
+                                    >
+                                        {item.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                     <div ref={chatEndRef} />
                 </div>
 
@@ -132,7 +174,7 @@ const SupportChat = () => {
                     />
                     <button
                         className="send-button"
-                        onClick={handleSend}
+                        onClick={() => handleSend()}
                         disabled={inputValue.trim() === '' || isTyping}
                     >
                         Send
