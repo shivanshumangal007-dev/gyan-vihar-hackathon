@@ -1,7 +1,7 @@
 /************************************
  * CONFIG
  ************************************/
-const API_URL = "http://localhost:3000/api/posts"; // change after deploy
+const API_URL = "https://gyan-vihar-hackathon-backend.onrender.com/api/posts"; // change after deploy
 
 /************************************
  * LOCOMOTIVE SCROLL
