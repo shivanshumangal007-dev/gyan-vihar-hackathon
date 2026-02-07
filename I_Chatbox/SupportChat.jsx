@@ -39,14 +39,17 @@ const SupportChat = () => {
         setIsTyping(true);
 
         try {
-            const res = await fetch("http://localhost:3000/api/chat", {
+            const res = await fetch(
+              "https://normal-chatbot-backend.onrender.com/api/chat",
+              {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    message: userMessage.text,
-                    sessionId: "anonymous_session",
+                  message: userMessage.text,
+                  sessionId: "anonymous_session",
                 }),
-            });
+              },
+            );
 
             const data = await res.json();
 
