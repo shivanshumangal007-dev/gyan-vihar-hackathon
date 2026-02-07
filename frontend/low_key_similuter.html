@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Overthinking Timeline Simulator</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+
+    .triggers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .trigger {
+      background: #2a2a2a;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 0.9rem;
+    }
+
+    .trigger:hover {
+      background: #444;
+      box-shadow: 0 0 10px #00f9ff;
+    }
+
+    canvas {
+      margin-top: 10px;
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⏳ Overthinking Timeline Simulator</h1>
+    <p>Select what happened today 👇</p>
+
+    <div class="triggers">
+      <div class="trigger" onclick="addScore(20)">📚 Exam Stress</div>
+      <div class="trigger" onclick="addScore(15)">❤️ Crush Drama</div>
+      <div class="trigger" onclick="addScore(10)">📱 Insta DM</div>
+      <div class="trigger" onclick="addScore(25)">😱 No WiFi</div>
+      <div class="trigger" onclick="addScore(5)">☕ Too Much Coffee</div>
+    </div>
+
+    <canvas id="meter" width="300" height="150"></canvas>
+    <div class="result" id="result">Your brain is calm 😌</div>
+  </div>
+
+  <script>
+    let score = 0;
+    const canvas = document.getElementById("meter");
+    const ctx = canvas.getContext("2d");
+
+    function drawMeter(value) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Base arc
+      ctx.beginPath();
+      ctx.arc(150, 150, 120, Math.PI, 2 * Math.PI, false);
+      ctx.lineWidth = 20;
+      ctx.strokeStyle = "#333";
+      ctx.stroke();
+
+      // Colored arc
+      const angle = Math.PI + (Math.PI * value / 100);
+      ctx.beginPath();
+      ctx.arc(150, 150, 120, Math.PI, angle, false);
+      ctx.lineWidth = 20;
+      ctx.strokeStyle = value > 70 ? "red" : value > 40 ? "orange" : "lime";
+      ctx.stroke();
+
+      // Needle
+      const needleAngle = Math.PI + (Math.PI * value / 100);
+      const x = 150 + 100 * Math.cos(needleAngle);
+      const y = 150 + 100 * Math.sin(needleAngle);
+
+      ctx.beginPath();
+      ctx.moveTo(150, 150);
+      ctx.lineTo(x, y);
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = "yellow";
+      ctx.stroke();
+    }
+
+    function addScore(points) {
+      score = Math.min(score + points, 100);
+      drawMeter(score);
+
+      const result = document.getElementById("result");
+      if (score < 40) {
+        result.textContent = "Your brain is calm 😌";
+      } else if (score < 70) {
+        result.textContent = "Hmm... looping thoughts detected 🤔";
+      } else {
+        result.textContent = "Bro you’re overthinking on turbo mode ⚡🔥";
+      }
+    }
+
+    drawMeter(0); // initial
+  </script>
+</body>
+</html>

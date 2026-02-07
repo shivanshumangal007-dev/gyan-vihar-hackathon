@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Overthinking Meter — Interactive</title>
+<style>
+
+  
+  :root{
+    --bg: #0f1724;         /* dark background - change if you want pastel */
+    --card: #0b1220;
+    --accent1: #00F9FF;    /* neon cyan */
+    --accent2: #FF00A0;    /* neon pink */
+    --muted: #9AA4B2;
+    --glass: rgba(255,255,255,0.04);
+  }
+  body{
+    margin:0;
+    font-family: Inter, system-ui, Arial;
+    background: linear-gradient(180deg,#071126 0%, #0b1728 100%);
+    color:#e6eef8;
+    display:flex;
+    min-height:100vh;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+
+  .widget {
+    width:100%;
+    max-width:980px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:18px;
+    padding:22px;
+    box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+    display:grid;
+    grid-template-columns: 1fr 420px;
+    gap:18px;
+    align-items:start;
+  }
+
+  .left {
+    padding:12px;
+  }
+
+  .title {
+    font-size:20px;
+    font-weight:700;
+    letter-spacing:0.2px;
+    color:var(--accent1);
+    margin-bottom:8px;
+  }
+  .subtitle { color:var(--muted); margin-bottom:16px; }
+
+  .q {
+    background:var(--glass);
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:10px;
+    border:1px solid rgba(255,255,255,0.03);
+  }
+  .q p { margin:0 0 8px 0; font-weight:600; color:#dcefff; }
+  .options { display:flex; gap:8px; flex-wrap:wrap; }
+  .opt {
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.06);
+    color: #dbe9ff;
+    padding:8px 10px;
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:14px;
+    transition: all .18s ease;
+  }
+  .opt.selected {
+    background: linear-gradient(90deg, var(--accent2), var(--accent1));
+    box-shadow: 0 6px 18px rgba(0,249,255,0.08);
+    color:#071126;
+    transform: translateY(-2px);
+    border: none;
+  }
+
+  .actions {
+    margin-top:10px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+  }
+  .btn {
+    background: linear-gradient(90deg, var(--accent2), var(--accent1));
+    border:none;
+    color:#071126;
+    padding:10px 14px;
+    border-radius:10px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow: 0 8px 26px rgba(0,249,255,0.06);
+  }
+  .btn.secondary{
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.06);
+    color:var(--muted);
+  }
+
+  /* Right side: gauge */
+  .gauge-wrap{
+    padding:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:12px;
+  }
+  .gauge-card{
+    width:360px;
+    height:240px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    box-shadow: 0 6px 20px rgba(2,6,23,0.6);
+  }
+
+  /* svg needle area styles */
+  .gauge {
+    width:320px;
+    height:160px;
+  }
+
+  .needle {
+    transform-origin: 50% 100%; /* pivot at bottom center of needle */
+    transition: transform 1.2s cubic-bezier(.2,.9,.3,1);
+    will-change: transform;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6));
+  }
+
+  .center-dot{
+    position:absolute;
+    width:14px; height:14px;
+    border-radius:50%;
+    background: linear-gradient(90deg,var(--accent2),var(--accent1));
+    bottom:46px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+  }
+
+  .score {
+    font-size:28px;
+    font-weight:800;
+    color:#fff;
+    margin-top:6px;
+    letter-spacing:0.6px;
+  }
+
+  .interpretation {
+    color:var(--muted);
+    padding:8px 12px;
+    text-align:center;
+    font-size:14px;
+  }
+
+  /* small meter ticks labels */
+  .ticks {
+    display:flex;
+    justify-content:space-between;
+    margin-top:6px;
+    color:var(--muted);
+    font-weight:700;
+    font-size:12px;
+  }
+
+  /* responsive */
+  @media (max-width:920px){
+    .widget{ grid-template-columns: 1fr; }
+    .gauge-card{ width:100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="widget" id="over-widget">
+  <div class="left">
+    <div class="title">Overthinking Meter</div>
+    <div class="subtitle">Answer quick, get a live meter. No labels, just vibes. Results are private.</div>
+
+    <!-- Questions (5) - each gives 0..4 points -->
+    <div id="questions">
+      <div class="q" data-q="0">
+        <p>1) During the last week, how often did you replay past conversations in your head?</p>
+        <div class="options">
+          <button class="opt" data-val="0">Never</button>
+          <button class="opt" data-val="1">Once or twice</button>
+          <button class="opt" data-val="2">Sometimes</button>
+          <button class="opt" data-val="3">Often</button>
+          <button class="opt" data-val="4">Almost always</button>
+        </div>
+      </div>
+
+      <div class="q" data-q="1">
+        <p>2) How often do you worry about things that are out of your control?</p>
+        <div class="options">
+          <button class="opt" data-val="0">Never</button>
+          <button class="opt" data-val="1">Rarely</button>
+          <button class="opt" data-val="2">Sometimes</button>
+          <button class="opt" data-val="3">Often</button>
+          <button class="opt" data-val="4">All the time</button>
+        </div>
+      </div>
+
+      <div class="q" data-q="2">
+        <p>3) Do small uncertainties make you lose sleep or stay awake thinking?</p>
+        <div class="options">
+          <button class="opt" data-val="0">No</button>
+          <button class="opt" data-val="1">Rarely</button>
+          <button class="opt" data-val="2">Sometimes</button>
+          <button class="opt" data-val="3">Often</button>
+          <button class="opt" data-val="4">Almost always</button>
+        </div>
+      </div>
+
+      <div class="q" data-q="3">
+        <p>4) How much time daily do you spend overthinking on average?</p>
+        <div class="options">
+          <button class="opt" data-val="0">0-5 minutes</button>
+          <button class="opt" data-val="1">5-15 minutes</button>
+          <button class="opt" data-val="2">15-30 minutes</button>
+          <button class="opt" data-val="3">30-60 minutes</button>
+          <button class="opt" data-val="4">1+ hour</button>
+        </div>
+      </div>
+
+      <div class="q" data-q="4">
+        <p>5) How strong is the loop of 'what if' thoughts for you?</p>
+        <div class="options">
+          <button class="opt" data-val="0">Not at all</button>
+          <button class="opt" data-val="1">A little</button>
+          <button class="opt" data-val="2">Moderately</button>
+          <button class="opt" data-val="3">Quite a bit</button>
+          <button class="opt" data-val="4">Extremely</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="calcBtn">Check Meter</button>
+        <button class="btn secondary" id="resetBtn">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="gauge-wrap">
+    <div class="gauge-card">
+      <!-- SVG semicircle gauge -->
+      <svg class="gauge" viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Overthinking Meter Gauge">
+        <!-- background arc -->
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1">
+            <stop offset="0%" stop-color="#39FF14"/>
+            <stop offset="50%" stop-color="#FFD166"/>
+            <stop offset="100%" stop-color="#FF0066"/>
+          </linearGradient>
+          <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#000" flood-opacity="0.35"/>
+          </filter>
+        </defs>
+
+        <!-- arc track -->
+        <path d="M20 140 A140 140 0 0 1 300 140" fill="none" stroke="#1f2b3a" stroke-width="22" stroke-linecap="round"/>
+
+        <!-- colored arc overlay using stroke-dasharray (we will keep static gradient) -->
+        <path d="M20 140 A140 140 0 0 1 300 140" fill="none" stroke="url(#g1)" stroke-width="18" stroke-linecap="round" stroke-opacity="0.95"/>
+
+        <!-- ticks (subtle) -->
+        <!-- needle group (rotates) -->
+        <g id="needleGroup" transform="translate(160,140) rotate(-90)">
+          <!-- needle base / shaft -->
+          <rect class="needle" x="-3.5" y="-105" width="7" height="95" rx="4" fill="#ffffff"/>
+          <!-- needle tip highlight -->
+          <polygon points="0,-105 6,-86 -6,-86" fill="#fff8"/>
+        </g>
+
+        <!-- center hole -->
+        <circle cx="160" cy="140" r="8" fill="#0b1220" stroke="#fff" stroke-opacity="0.08"/>
+      </svg>
+
+      <div class="center-dot" aria-hidden="true"></div>
+    </div>
+
+    <div class="score" id="scoreText">--%</div>
+    <div class="interpretation" id="interp">Answer the quick questions, then tap "Check Meter".</div>
+    <div class="ticks"><div>Chill</div><div>Overthinking</div><div>High</div></div>
+  </div>
+</div>
+
+<script>
+  // JS logic: collect answers, map to 0-100, rotate needle between -90deg (0) to +90deg (100)
+  const optButtons = document.querySelectorAll('.opt');
+  const calcBtn = document.getElementById('calcBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const scoreText = document.getElementById('scoreText');
+  const interp = document.getElementById('interp');
+  const needle = document.querySelector('#needleGroup');
+
+  // store answers in array of length 5 (initial null)
+  const answers = Array(5).fill(null);
+
+  // attach click handlers to option buttons
+  optButtons.forEach(btn => {
+    btn.addEventListener('click', e => {
+      const parent = btn.closest('.q');
+      const qIndex = Number(parent.getAttribute('data-q'));
+      // mark selected visually
+      Array.from(parent.querySelectorAll('.opt')).forEach(o => o.classList.remove('selected'));
+      btn.classList.add('selected');
+
+      // store numeric value
+      answers[qIndex] = Number(btn.getAttribute('data-val'));
+    });
+  });
+
+  function computeScore(){
+    // if any answer is null, treat as 0 OR prompt - we will auto-treat as 0 but warn
+    const filled = answers.filter(v => v !== null).length;
+    if(filled < answers.length){
+      // optional: prompt user; here we just continue with missing as 0
+      // alert('Please answer all questions for an accurate reading. Missing answers will be treated as 0.');
+    }
+    const total = answers.reduce((s, v) => s + (v || 0), 0); // max total = 5*4=20
+    const percent = Math.round((total / (answers.length*4)) * 100); // 0..100
+    return percent;
+  }
+
+  function setNeedle(percent){
+    // map 0..100 to angle -90..+90
+    const min = -90, max = 90;
+    const angle = (percent/100) * (max - min) + min;
+    // apply transform with smooth animation (CSS transition defined)
+    needle.style.transform = `translate(160px,140px) rotate(${angle}deg)`; // NOTE: svg group was translated earlier; to be safe we set transform - using rotate only by changing transform attribute
+    // but since we used transform attribute inline, better to set attribute:
+    needle.setAttribute('transform', `translate(160,140) rotate(${angle})`);
+  }
+
+  function interpret(percent){
+    if(percent < 20) {
+      return {
+        label: 'Chill Mode — low overthinking',
+        advice: 'Nice! You have good mental bandwidth. Keep your routine, sleep well and maintain boundaries.'
+      };
+    } else if(percent < 45){
+      return {
+        label: 'Mild — occasional replays',
+        advice: 'Small worries sometimes pop up. Try 5-min breathing breaks and a short mind-dump (write 3 thoughts).'
+      };
+    } else if(percent < 70){
+      return {
+        label: 'Moderate — noticeable loop',
+        advice: 'You replay things often. Try grounding exercises, schedule a 10-min worry-slot, and reach out when needed.'
+      };
+    } else {
+      return {
+        label: 'High — frequent overthinking',
+        advice: 'Your thoughts are on replay a lot. Consider talking to a counselor or a trusted friend. If it affects sleep, seek support.'
+      };
+    }
+  }
+
+  calcBtn.addEventListener('click', e => {
+    const p = computeScore();
+    scoreText.textContent = p + '%';
+    // animate needle
+    setNeedle(p);
+    // update interpretation
+    const data = interpret(p);
+    interp.innerHTML = `<strong>${data.label}</strong><br>${data.advice}`;
+    // small sparkle effect: flash score color (optional)
+    scoreText.animate([{opacity:0.6},{opacity:1}], {duration:420});
+  });
+
+  resetBtn.addEventListener('click', e => {
+    // clear answers
+    for(let i=0;i<answers.length;i++) answers[i] = null;
+    document.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+    // reset needle
+    scoreText.textContent = '--%';
+    interp.textContent = 'Answer the quick questions, then tap "Check Meter".';
+    setNeedle(0);
+  });
+
+  // initialize: set needle to 0
+  setNeedle(0);
+</script>
+
+</body>
+</html>
