@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About NORMAL - Your Safe Space for Mental Health</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Locomotive Scroll CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+    
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0D0D0D;
+            --text-light: #F1F5F9;
+            --overlay-dark: rgba(0, 0, 0, 0.6);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+
+        #scroll-container {
+            background: var(--bg-dark);
+        }
+
+        /* Section Styling */
+        .about-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            padding: 4rem 2rem;
+        }
+
+        /* Fixed Background Images */
+        .bg-image {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .bg-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--overlay-dark);
+            z-index: 1;
+        }
+
+        .bg-left {
+            left: 0;
+        }
+
+        .bg-right {
+            right: 0;
+        }
+
+        /* Text Container */
+        .text-container {
+            max-width: 600px;
+            padding: 3rem;
+            background: rgba(13, 13, 13, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .text-left .text-container {
+            margin-left: auto;
+            margin-right: 8%;
+        }
+
+        .text-right .text-container {
+            margin-left: 8%;
+            margin-right: auto;
+        }
+
+        /* Typography */
+        h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        p {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: #cbd5e1;
+            font-weight: 300;
+        }
+
+        /* Section Divider */
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, rgba(148, 163, 184, 0.3) 50%, transparent 100%);
+            margin: 0 auto;
+        }
+
+        /* Final Section Special Styling */
+        .final-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            overflow: hidden;
+        }
+
+        .final-section::before {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+            50% { transform: translate(-50%, -50%) rotate(180deg); }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: float-particle 15s infinite;
+        }
+
+        @keyframes float-particle {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+
+        .final-text-container {
+            max-width: 900px;
+            padding: 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .final-section h2 {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+        }
+
+        .final-section p {
+            font-size: 1.5rem;
+            line-height: 2;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 1024px) {
+            .bg-image {
+                width: 100%;
+                height: 50%;
+                background-attachment: scroll;
+            }
+
+            .bg-left, .bg-right {
+                left: 0;
+                right: 0;
+            }
+
+            .about-section {
+                flex-direction: column;
+                min-height: auto;
+                padding: 2rem 0;
+            }
+
+            .text-left .text-container,
+            .text-right .text-container {
+                margin: 2rem auto;
+                max-width: 90%;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .final-section h2 {
+                font-size: 2.5rem;
+            }
+
+            .final-section p {
+                font-size: 1.125rem;
+            }
+
+            .final-text-container {
+                padding: 2rem;
+            }
+        }
+
+        /* Smooth Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+
+        /* Loading Screen */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader-text {
+            font-size: 2rem;
+            font-weight: 600;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-text">NORMAL</div>
+    </div>
+
+    <!-- Main Scroll Container -->
+    <div id="scroll-container" data-scroll-container>
+        
+        <!-- Section 1: Why NORMAL Exists -->
+        <section class="about-section text-left" data-scroll-section>
+            <div class="bg-image bg-right" style="background-image: url('https://images.unsplash.com/photo-1495106245177-55dc6f43e83f?q=80&w=2070');" data-scroll data-scroll-speed="-1"></div>
+            
+            <div class="section-content">
+                <div class="text-container reveal-left" data-scroll data-scroll-speed="1">
+                    <h2>Why NORMAL Exists</h2>
+                    <p>
+                        In the shadows of academia, countless students struggle silently with anxiety, depression, and overwhelming stress. The stigma surrounding mental health prevents them from seeking help, creating an epidemic of isolation. NORMAL was born from a simple truth: no student should face their darkest moments alone. We exist to break the silence and illuminate the path to healing.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 2: A Safe Space for Every Story -->
+        <section class="about-section text-right" data-scroll-section>
+            <div class="bg-image bg-left" style="background-image: url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=2132');" data-scroll data-scroll-speed="-1"></div>
+            
+            <div class="section-content">
+                <div class="text-container reveal-right" data-scroll data-scroll-speed="1">
+                    <h2>A Safe Space for Every Story</h2>
+                    <p>
+                        NORMAL offers a sanctuary where vulnerability meets understanding. Through anonymous sharing, peer-to-peer support, and judgment-free conversations, students discover they're not alone in their struggles. Here, every story matters. Every voice deserves to be heard. Connection becomes the bridge from darkness to light, transforming isolation into community.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 3: Technology with Empathy -->
+        <section class="about-section text-left" data-scroll-section>
+            <div class="bg-image bg-right" style="background-image: url('https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?q=80&w=2074');" data-scroll data-scroll-speed="-1"></div>
+            
+            <div class="section-content">
+                <div class="text-container reveal-left" data-scroll data-scroll-speed="1">
+                    <h2>Technology with Empathy</h2>
+                    <p>
+                        We blend cutting-edge AI with genuine human compassion. Our intelligent support systems provide 24/7 guidance, personalized resources, and crisis intervention—all while maintaining the human touch that makes healing possible. From AI-guided chatbots to curated wellness content, technology becomes a gentle companion on the journey to mental wellness.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 4: Final - This is NORMAL -->
+        <section class="final-section" data-scroll-section>
+            <!-- Floating Particles -->
+            <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 25%; animation-delay: 3s;"></div>
+            <div class="particle" style="left: 40%; animation-delay: 6s;"></div>
+            <div class="particle" style="left: 55%; animation-delay: 2s;"></div>
+            <div class="particle" style="left: 70%; animation-delay: 5s;"></div>
+            <div class="particle" style="left: 85%; animation-delay: 8s;"></div>
+            <div class="particle" style="left: 15%; animation-delay: 4s;"></div>
+            <div class="particle" style="left: 60%; animation-delay: 7s;"></div>
+
+            <div class="final-text-container reveal" data-scroll data-scroll-speed="0.5">
+                <h2>This is NORMAL.</h2>
+                <p>
+                    Because talking about mental health shouldn't feel abnormal. Because seeking help is a sign of strength, not weakness. Because healing happens when we come together. Together, we're rewriting the narrative—making vulnerability courageous, making connection commonplace, making healing the new NORMAL.
+                </p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Locomotive Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+    
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        // Register GSAP Plugin
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Wait for page to load
+        window.addEventListener('load', () => {
+            // Hide loader
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                }, 500);
+            }, 1500);
+
+            // Initialize Locomotive Scroll
+            const locoScroll = new LocomotiveScroll({
+                el: document.querySelector('#scroll-container'),
+                smooth: true,
+                multiplier: 0.8,
+                lerp: 0.08,
+                smartphone: {
+                    smooth: true
+                },
+                tablet: {
+                    smooth: true
+                }
+            });
+
+            // Sync Locomotive Scroll with ScrollTrigger
+            locoScroll.on('scroll', ScrollTrigger.update);
+
+            ScrollTrigger.scrollerProxy('#scroll-container', {
+                scrollTop(value) {
+                    return arguments.length 
+                        ? locoScroll.scrollTo(value, 0, 0) 
+                        : locoScroll.scroll.instance.scroll.y;
+                },
+                getBoundingClientRect() {
+                    return {
+                        top: 0,
+                        left: 0,
+                        width: window.innerWidth,
+                        height: window.innerHeight
+                    };
+                },
+                pinType: document.querySelector('#scroll-container').style.transform ? 'transform' : 'fixed'
+            });
+
+            // Refresh on resize
+            ScrollTrigger.addEventListener('refresh', () => locoScroll.update());
+            ScrollTrigger.refresh();
+
+            // Animate elements with class "reveal"
+            gsap.utils.toArray('.reveal').forEach((elem) => {
+                gsap.fromTo(elem, 
+                    {
+                        opacity: 0,
+                        y: 50
+                    },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1.2,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: elem,
+                            scroller: '#scroll-container',
+                            start: 'top 80%',
+                            end: 'bottom 20%',
+                            toggleActions: 'play none none reverse'
+                        }
+                    }
+                );
+            });
+
+            // Animate elements with class "reveal-left"
+            gsap.utils.toArray('.reveal-left').forEach((elem) => {
+                gsap.fromTo(elem,
+                    {
+                        opacity: 0,
+                        x: -80
+                    },
+                    {
+                        opacity: 1,
+                        x: 0,
+                        duration: 1.4,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: elem,
+                            scroller: '#scroll-container',
+                            start: 'top 75%',
+                            end: 'bottom 20%',
+                            toggleActions: 'play none none reverse'
+                        }
+                    }
+                );
+            });
+
+            // Animate elements with class "reveal-right"
+            gsap.utils.toArray('.reveal-right').forEach((elem) => {
+                gsap.fromTo(elem,
+                    {
+                        opacity: 0,
+                        x: 80
+                    },
+                    {
+                        opacity: 1,
+                        x: 0,
+                        duration: 1.4,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: elem,
+                            scroller: '#scroll-container',
+                            start: 'top 75%',
+                            end: 'bottom 20%',
+                            toggleActions: 'play none none reverse'
+                        }
+                    }
+                );
+            });
+
+            // Parallax effect on background images
+            gsap.utils.toArray('.bg-image').forEach((bg) => {
+                gsap.to(bg, {
+                    yPercent: 30,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: bg.closest('.about-section'),
+                        scroller: '#scroll-container',
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: 1
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
