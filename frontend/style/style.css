@@ -438,6 +438,21 @@ body {
   height: 100vh;
   position: relative;
 }
+#page5 .AI-symbol{
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 5rem;
+  height: 5rem;
+  overflow: hidden;
+  border-radius: 50% ;
+  box-shadow:5px 5px 20px #9183d9;
+  border: 2px solid purple;
+}
+
+.AI-symbol img{
+  width: 100%;
+}
 
 #page5 .right .heading {
   width: 100%;
