@@ -89,30 +89,54 @@
  * }
  */
 
-// PLACEHOLDER IMPLEMENTATION
-// Replace this with your actual AI model integration
+// INTEGRATED WITH IONIZED-COPERNICUS CHATBOT
+// Forwards requests to the mental health chatbot API
+
+const CHATBOT_API_URL = 'http://localhost:3000/api/chat';
+
 export async function getAIResponse(userMessage, conversationHistory) {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+        // Generate a session ID based on conversation history length
+        // This helps maintain context across the conversation
+        const sessionId = `session_${Date.now()}`;
 
-    // Placeholder responses - REPLACE THIS WITH YOUR AI MODEL
-    const responses = [
-        "I hear what you're sharing. Would you like to tell me more about how that makes you feel?",
-        "That sounds like it's been weighing on you. What emotions come up when you think about this?",
-        "I'm listening. Take your time to express what's on your mind.",
-        "It seems like this is important to you. Can you help me understand what this means for you?",
-        "Thank you for sharing that with me. How are you feeling right now?",
-        "I notice you mentioned that. What thoughts or feelings does that bring up?",
-        "That must be difficult. What would help you feel more at ease right now?",
-        "I'm here to listen. What else would you like to share about this?"
-    ];
+        // Call the ionized-copernicus chatbot API
+        const response = await fetch(CHATBOT_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: userMessage,
+                sessionId: sessionId
+            }),
+        });
 
-    // Simple placeholder logic - REPLACE WITH YOUR AI MODEL
-    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+        if (!response.ok) {
+            throw new Error(`Chatbot API error: ${response.status}`);
+        }
 
-    console.log('⚠️  WARNING: Using placeholder AI response. Please integrate your AI model in server/config/ai.js');
+        const data = await response.json();
 
-    return randomResponse;
+        console.log(`🤖 Ionized-Copernicus response - Emotion: ${data.emotion}, Intensity: ${data.intensity}`);
+
+        // Build response with action buttons if available
+        let responseText = data.message;
+
+        // If there are suggested actions, append them as options
+        if (data.actions && data.actions.length > 0) {
+            const actionLabels = data.actions.map(a => a.label).join(' | ');
+            responseText += `\n\n[Options: ${actionLabels}]`;
+        }
+
+        return responseText;
+
+    } catch (error) {
+        console.error('⚠️ Error calling ionized-copernicus API:', error.message);
+
+        // Fallback to a safe default response
+        return "I'm here to listen. What's on your mind right now?";
+    }
 }
 
 /**
