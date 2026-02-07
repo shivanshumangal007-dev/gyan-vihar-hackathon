@@ -66,9 +66,35 @@
       font-size: 1.1rem;
       font-weight: bold;
     }
+
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      padding: 12px 24px;
+      background: rgba(0, 249, 255, 0.15);
+      color: #00f9ff;
+      border: 2px solid rgba(0, 249, 255, 0.3);
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      z-index: 1000;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .back-button:hover {
+      background: rgba(0, 249, 255, 0.3);
+      border-color: #00f9ff;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 249, 255, 0.4);
+    }
   </style>
 </head>
 <body>
+  <a href="index.html" class="back-button">← Back</a>
   <div class="container">
     <h1>⏳ Overthinking Timeline Simulator</h1>
     <p>Select what happened today 👇</p>

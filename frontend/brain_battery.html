@@ -101,9 +101,35 @@
       font-weight: bold;
       text-shadow: 0 0 6px #0ff;
     }
+
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      padding: 12px 24px;
+      background: rgba(0, 255, 255, 0.15);
+      color: #0ff;
+      border: 2px solid rgba(0, 255, 255, 0.4);
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      z-index: 1000;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .back-button:hover {
+      background: rgba(0, 255, 255, 0.3);
+      border-color: #0ff;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+    }
   </style>
 </head>
 <body>
+  <a href="index.html" class="back-button">← Back</a>
   <div class="container">
     <h1>🔋 Brain Battery Test</h1>
     <div id="quiz"></div>
