@@ -166,7 +166,20 @@ app.listen(PORT, () => {
     console.log(`Mental First-Aid Chatbot v2.0 (HYBRID AI)`);
     console.log(`${'='.repeat(60)}`);
     console.log(`Server running on port ${PORT}`);
-    console.log(`AI Mode: ${AI_MODE ? 'ENABLED ✓' : 'DISABLED (using templates)'}`);
+
+    // Check AI Configuration
+    const hasKey = process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.length > 10;
+    console.log(`AI Mode Configured: ${AI_MODE}`);
+    console.log(`OpenAI Key Present: ${hasKey ? 'YES' : 'NO'}`);
+
+    if (AI_MODE && !hasKey) {
+        console.log(`⚠️  WARNING: AI_MODE is true but no valid API key found. Fallback to templates will occur.`);
+    } else if (AI_MODE && hasKey) {
+        console.log(`✅ AI Mode ACTIVE - Low/Medium intensity messages will use GPT-4o-mini`);
+    } else {
+        console.log(`ℹ️  Template Mode ACTIVE - All messages will use pre-written responses`);
+    }
+
     console.log(`\nEndpoints:`);
     console.log(`  - Health: http://localhost:${PORT}/health`);
     console.log(`  - Chat:   POST http://localhost:${PORT}/api/chat`);

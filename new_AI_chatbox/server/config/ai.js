@@ -58,7 +58,7 @@
  * import Anthropic from '@anthropic-ai/sdk';
  * const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
  * 
- * export async function getAIResponse(userMessage, conversationHistory) {
++ * export async function getAIResponse(userMessage, conversationHistory) {
  *   const message = await anthropic.messages.create({
  *     model: "claude-3-sonnet-20240229",
  *     max_tokens: 1024,

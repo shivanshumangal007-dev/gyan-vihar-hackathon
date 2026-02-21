@@ -39,7 +39,8 @@ const SupportChat = () => {
 
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL || ""}/api/chat`,
+        `http://localhost:5000/api/chat`,
+        // `https://normal-chatbot-backend.onrender.com/api/chat`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -55,7 +56,7 @@ const SupportChat = () => {
       const aiMessage = {
         id: Date.now() + 1,
         sender: "ai",
-        text: data.message,
+        text: data.response,
         timestamp: new Date(),
       };
 

@@ -1,95 +1,101 @@
 import express from 'express';
-import { getAIResponse } from '../config/ai.js';
+import { classifyEmotion } from '../chatbot/classifier.js';
+import { assessIntensity } from '../chatbot/intensityAssessor.js';
+import { generateResponse } from '../chatbot/responseGenerator.js';
+import { generateAIResponse } from '../chatbot/aiConversation.js';
+import { addMessage, getHistory } from '../chatbot/conversationMemory.js';
+import { logMetadata } from '../utils/logger.js';
 
 const router = express.Router();
 
-// Store conversation history (in-memory for now)
-// In production, you might want to use a database
-const conversations = new Map();
-
-// POST /api/chat - Handle chat messages
+/**
+ * POST /api/chat
+ * Hybrid chatbot endpoint
+ */
 router.post('/', async (req, res) => {
     try {
-        const { message, sessionId } = req.body;
+        const { message, sessionId = 'default' } = req.body;
 
-        // Validate input
-        if (!message || typeof message !== 'string' || message.trim() === '') {
+        if (!message || typeof message !== 'string' || message.trim().length === 0) {
             return res.status(400).json({
-                error: 'Invalid message',
-                message: 'Message is required and must be a non-empty string'
+                error: 'Invalid input',
+                message: 'Please provide a valid message'
             });
         }
 
-        // Get or create conversation history
-        const conversationId = sessionId || 'default';
-        if (!conversations.has(conversationId)) {
-            conversations.set(conversationId, []);
-        }
-        const history = conversations.get(conversationId);
+        const trimmedMessage = message.trim();
 
-        // Add user message to history
-        history.push({
-            role: 'user',
-            content: message.trim(),
-            timestamp: new Date()
-        });
+        // 1. Crisis Detection (Keyword-based)
+        const emotion = classifyEmotion(trimmedMessage);
+        const intensity = assessIntensity(trimmedMessage);
 
-        console.log(`📨 Received message: "${message.substring(0, 50)}${message.length > 50 ? '...' : ''}"`);
+        console.log(`📨 [${sessionId}] Emotion: ${emotion}, Intensity: ${intensity}`);
 
-        // Get AI response
-        // THIS IS WHERE YOU'LL INTEGRATE YOUR AI MODEL
-        const aiResponse = await getAIResponse(message, history);
+        // 2. High Intensity (Crisis) Handling
+        if (intensity === 'high') {
+            const templateResponse = generateResponse(emotion, intensity);
+            logMetadata(emotion, intensity);
 
-        // Add AI response to history
-        history.push({
-            role: 'assistant',
-            content: aiResponse,
-            timestamp: new Date()
-        });
-
-        // Keep only last 20 messages to prevent memory issues
-        if (history.length > 20) {
-            history.splice(0, history.length - 20);
+            return res.json({
+                response: templateResponse.message,
+                actions: templateResponse.actions,
+                mode: 'template',
+                reason: 'crisis_detected',
+                sessionId
+            });
         }
 
-        console.log(`🤖 AI response: "${aiResponse.substring(0, 50)}${aiResponse.length > 50 ? '...' : ''}"`);
+        // 3. AI Mode (Low/Medium Intensity)
+        if (process.env.OPENAI_API_KEY) {
+            try {
+                const history = getHistory(sessionId);
+                const aiResponse = await generateAIResponse(trimmedMessage, history);
 
-        // Send response
-        res.json({
-            response: aiResponse,
-            sessionId: conversationId
+                // Update Memory
+                addMessage(sessionId, 'user', trimmedMessage);
+                addMessage(sessionId, 'assistant', aiResponse.message);
+
+                logMetadata(emotion, intensity);
+
+                return res.json({
+                    response: aiResponse.message,
+                    actions: aiResponse.actions,
+                    mode: 'ai',
+                    sessionId
+                });
+            } catch (aiError) {
+                console.error('AI Processing failed, falling back to templates:', aiError.message);
+            }
+        }
+
+        // 4. Fallback to Templates
+        const fallbackResponse = generateResponse(emotion, intensity);
+        logMetadata(emotion, intensity);
+
+        return res.json({
+            response: fallbackResponse.message,
+            actions: fallbackResponse.actions,
+            mode: 'template',
+            reason: process.env.OPENAI_API_KEY ? 'ai_failed' : 'ai_disabled',
+            sessionId
         });
 
     } catch (error) {
-        console.error('Error in chat route:', error);
+        console.error('Chat processing error:', error);
         res.status(500).json({
-            error: 'Failed to process message',
-            message: 'An error occurred while processing your message. Please try again.'
+            error: 'Internal server error',
+            message: 'Something went wrong while processing your message.'
         });
     }
 });
 
-// GET /api/chat/history/:sessionId - Get conversation history (optional)
+/**
+ * GET /api/chat/history/:sessionId
+ */
 router.get('/history/:sessionId', (req, res) => {
     const { sessionId } = req.params;
-    const history = conversations.get(sessionId) || [];
-
-    res.json({
-        sessionId,
-        messages: history,
-        count: history.length
-    });
-});
-
-// DELETE /api/chat/history/:sessionId - Clear conversation history (optional)
-router.delete('/history/:sessionId', (req, res) => {
-    const { sessionId } = req.params;
-    conversations.delete(sessionId);
-
-    res.json({
-        message: 'Conversation history cleared',
-        sessionId
-    });
+    const history = getHistory(sessionId);
+    res.json({ sessionId, messages: history });
 });
 
 export default router;
